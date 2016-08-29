@@ -3,22 +3,35 @@
                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                           xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
                           xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
-
-    <!-- Sample Thing Type -->
-    <thing-type id="sample">
-        <label>Netatmo Binding Thing</label>
-        <description>Sample thing for Netatmo Binding</description>
+    <thing-type id="weather-station">
+        <label>Netatmo Weather Station</label>
+        <description>The Netatmo Weatherstation.</description>
 
         <channels>
-            <channel id="channel1" typeId="sample-channel"/>
+            <channel id="temperature" typeId="temperature"/>
+            <channel id="humidity" typeId="humidity"/>
+            <channel id="co2" typeId="co2"/>
         </channels>
     </thing-type>
 
-    <!-- Sample Channel Type -->
-    <channel-type id="sample-channel">
-        <item-type>String</item-type>
-        <label>Netatmo Binding Channel</label>
-        <description>Sample channel for Netatmo Binding</description>
+    <channel-type id="temperature">
+        <item-type>Number</item-type>
+        <label>Temperature</label>
+        <description>The current temperature.</description>
+        <category>Temperature</category>
     </channel-type>
 
+    <channel-type id="humidity">
+        <item-type>Number</item-type>
+        <label>Humidity</label>
+        <description>The current humidity.</description>
+        <category>Humidity</category>
+    </channel-type>
+
+    <channel-type id="co2">
+        <item-type>Number</item-type>
+        <label>CO2</label>
+        <description>The current CO2 saturation.</description>
+        <category>CarbonDioxide</category>
+    </channel-type>
 </thing:thing-descriptions>
