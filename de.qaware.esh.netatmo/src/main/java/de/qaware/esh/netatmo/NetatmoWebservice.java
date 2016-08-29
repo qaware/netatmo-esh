@@ -32,10 +32,6 @@ import java.util.List;
 public class NetatmoWebservice {
     public static final NetatmoWebservice INSTANCE = new NetatmoWebservice();
 
-    private static final String CLIENT_ID = "";
-    private static final String CLIENT_SECRET = "";
-    private static final String USERNAME = "";
-    private static final String PASSWORD = "";
     private static final String SCOPES = "read_station read_thermostat write_thermostat";
     private static final String REQUEST_TOKEN_URL = "https://api.netatmo.net/oauth2/token";
     private static final String STATION_DATA_URL = "https://api.netatmo.net/api/getstationsdata";
@@ -88,10 +84,10 @@ public class NetatmoWebservice {
         HttpPost request = new HttpPost(REQUEST_TOKEN_URL);
         List<NameValuePair> formData = new ArrayList<>();
         formData.add(new BasicNameValuePair("grant_type", "password"));
-        formData.add(new BasicNameValuePair("client_id", CLIENT_ID));
-        formData.add(new BasicNameValuePair("client_secret", CLIENT_SECRET));
-        formData.add(new BasicNameValuePair("username", USERNAME));
-        formData.add(new BasicNameValuePair("password", PASSWORD));
+        formData.add(new BasicNameValuePair("client_id", Credentials.CLIENT_ID));
+        formData.add(new BasicNameValuePair("client_secret", Credentials.CLIENT_SECRET));
+        formData.add(new BasicNameValuePair("username", Credentials.USERNAME));
+        formData.add(new BasicNameValuePair("password", Credentials.PASSWORD));
         formData.add(new BasicNameValuePair("scope", SCOPES));
 
         UrlEncodedFormEntity body = new UrlEncodedFormEntity(formData);
