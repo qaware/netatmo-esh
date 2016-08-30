@@ -19,6 +19,7 @@
         <label>Temperature</label>
         <description>The current temperature.</description>
         <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f C"/>
     </channel-type>
 
     <channel-type id="humidity">
@@ -26,6 +27,7 @@
         <label>Humidity</label>
         <description>The current humidity.</description>
         <category>Humidity</category>
+        <state readOnly="true" pattern="%.1f %%"/>
     </channel-type>
 
     <channel-type id="co2">
@@ -33,5 +35,6 @@
         <label>CO2</label>
         <description>The current CO2 saturation.</description>
         <category>CarbonDioxide</category>
+        <state readOnly="true" pattern="%d ppm"/>
     </channel-type>
 </thing:thing-descriptions>
