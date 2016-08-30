@@ -32,7 +32,7 @@ import java.util.List;
 public class NetatmoWebservice {
     public static final NetatmoWebservice INSTANCE = new NetatmoWebservice();
 
-    private static final String SCOPES = "read_station read_thermostat write_thermostat";
+    private static final String SCOPES = "read_station";
     private static final String REQUEST_TOKEN_URL = "https://api.netatmo.net/oauth2/token";
     private static final String STATION_DATA_URL = "https://api.netatmo.net/api/getstationsdata";
 
@@ -110,6 +110,10 @@ public class NetatmoWebservice {
     }
 
     public StationData fetchStationData() throws IOException {
+        if (token == null) {
+            authenticate();
+        }
+
         HttpGet request = new HttpGet(STATION_DATA_URL);
         request.setHeader("Authorization", "Bearer " + token.getAccessToken());
 
