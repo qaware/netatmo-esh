@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="binding.netatmo">
-    <implementation class="NetatmoHandlerFactory"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true"
+               name="de.qaware.esh.netatmo.internal.NetatmoHandlerFactory">
+    <implementation class="de.qaware.esh.netatmo.internal.NetatmoHandlerFactory"/>
 
     <service>
         <provide interface="org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory"/>

@@ -3,7 +3,7 @@
                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                           xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
                           xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
-    <thing-type id="weather-station">
+    <thing-type id="weatherstation">
         <label>Netatmo Weather Station</label>
         <description>The Netatmo Weatherstation.</description>
 

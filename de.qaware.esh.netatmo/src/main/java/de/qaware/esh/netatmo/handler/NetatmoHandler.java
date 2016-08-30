@@ -1,5 +1,11 @@
 package de.qaware.esh.netatmo.handler;
 
+import de.qaware.esh.netatmo.NetatmoBindingConstants;
+import de.qaware.esh.netatmo.NetatmoWebservice;
+import de.qaware.esh.netatmo.model.DashboardData;
+import de.qaware.esh.netatmo.model.Device;
+import de.qaware.esh.netatmo.model.StationData;
+import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
@@ -8,7 +14,9 @@ import org.eclipse.smarthome.core.types.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static de.qaware.esh.netatmo.NetatmoBindingConstants.CHANNEL_1;
+import java.io.IOException;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The {@link NetatmoHandler} is responsible for handling commands, which are
@@ -20,33 +28,63 @@ public class NetatmoHandler extends BaseThingHandler {
 
     private Logger logger = LoggerFactory.getLogger(NetatmoHandler.class);
 
+    private static final long DELAY_IN_MINUTES = 10;
+    private ScheduledFuture<?> scheduledFuture;
+
     public NetatmoHandler(Thing thing) {
         super(thing);
     }
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        if (channelUID.getId().equals(CHANNEL_1)) {
-            // TODO: handle command
-
-            // Note: if communication with thing fails for some reason,
-            // indicate that by setting the status with detail information
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-            // "Could not control device at IP address x.x.x.x");
-        }
     }
 
     @Override
     public void initialize() {
-        // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
-        // Long running initialization should be done asynchronously in background.
         updateStatus(ThingStatus.ONLINE);
 
-        // Note: When initialization can NOT be done set the status with more details for further
-        // analysis. See also class ThingStatusDetail for all available status details.
-        // Add a description to give user information to understand why thing does not work
-        // as expected. E.g.
-        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
-        // "Can not access device as username and/or password are invalid");
+        scheduledFuture = scheduler.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                refresh();
+            }
+
+        }, 0, DELAY_IN_MINUTES, TimeUnit.MINUTES);
+    }
+
+    @Override
+    public void dispose() {
+        scheduledFuture.cancel(false);
+
+        super.dispose();
+    }
+
+    private void refresh() {
+        String id = getThing().getProperties().get("id");
+        logger.debug("Refreshing data for weatherstation {}", id);
+
+        StationData data;
+        try {
+            data = NetatmoWebservice.INSTANCE.fetchStationData();
+        } catch (IOException e) {
+            logger.error("Exception while fetching data from webservice", e);
+            updateStatus(ThingStatus.OFFLINE);
+            return;
+        }
+
+        for (Device device : data.getBody().getDevices()) {
+            if (device.getId().equals(id)) {
+                DashboardData dashboard = device.getDashboardData();
+
+                updateState(NetatmoBindingConstants.CHANNEL_TEMPERATURE, new DecimalType(dashboard.getTemperature()));
+                updateState(NetatmoBindingConstants.CHANNEL_HUMIDITY, new DecimalType(dashboard.getHumidity()));
+                updateState(NetatmoBindingConstants.CHANNEL_CO2, new DecimalType(dashboard.getCo2()));
+                updateStatus(ThingStatus.ONLINE);
+                return;
+            }
+        }
+
+        // Weather station not found, switch to offline
+        updateStatus(ThingStatus.OFFLINE);
     }
 }

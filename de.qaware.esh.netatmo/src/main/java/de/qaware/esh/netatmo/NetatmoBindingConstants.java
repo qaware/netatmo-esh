@@ -13,9 +13,10 @@ public class NetatmoBindingConstants {
     public static final String BINDING_ID = "netatmo";
 
     // List of all Thing Type UIDs
-    public final static ThingTypeUID THING_TYPE_WEATHER_STATION = new ThingTypeUID(BINDING_ID, "weather-station");
+    public final static ThingTypeUID THING_TYPE_WEATHER_STATION = new ThingTypeUID(BINDING_ID, "weatherstation");
 
-    // List of all Channel ids
-    public final static String CHANNEL_1 = "channel1";
+    public final static String CHANNEL_TEMPERATURE = "temperature";
+    public final static String CHANNEL_HUMIDITY = "humidity";
+    public final static String CHANNEL_CO2 = "co2";
 
 }
