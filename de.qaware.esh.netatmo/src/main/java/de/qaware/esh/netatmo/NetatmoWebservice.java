@@ -47,11 +47,12 @@ public class NetatmoWebservice {
         this.gson = new Gson();
     }
 
+    // That whole method is needed as the HttpClient considers the TLS certificate invalid. This disables the certificate
+    // checking. DO NOT USE THIS IN PRODUCTION!
     private CloseableHttpClient createHttpClient() {
         try {
             SSLContext sslContext = SSLContext.getInstance("TLS");
             TrustManager trustAll = new X509TrustManager() {
-
                 @Override
                 public X509Certificate[] getAcceptedIssuers() {
                     return null;
